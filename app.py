@@ -1,16 +1,12 @@
 import time
-from typing import List, Any
-
-import pandas as pd
-from bs4 import element
-
+from pandas import unique
 from flask import Flask, request, url_for, session, redirect
 import spotipy
-import spotipy.util as util
 from spotipy import SpotifyOAuth
+from secrets_1 import clientSecret,clientID
 
 app = Flask(__name__)
-app.secret_key = "secretKey"
+app.secret_key = "BLs029sjO1"
 app.config['SESSION_COOKIE_NAME'] = 'Session Cookie 1'
 TOKEN_INFO = "token_info"
 
@@ -36,12 +32,15 @@ def get_token():
     token_info = session.get(TOKEN_INFO, None)
     if not token_info:
         raise "exception"
-    now = int(time.time())
 
+    sp = spotify_oauth()
+    now = int(time.time())
     is_expired = token_info['expires_at'] - now < 60
+
     if is_expired:
-        sp = spotify_oauth()
         token_info = sp.refresh_access_token(token_info['refresh_token'])
+        session[TOKEN_INFO] = token_info
+
     return token_info
 
 
@@ -67,16 +66,25 @@ def genres():
         track_genre_list.append([track['track']['id'], artist['genres']])
 
     # remove duplicates in list
-    updated_g_list = pd.unique(genre_list).tolist()
+    updatedGenreList = unique(genre_list).tolist()
 
-    for index, genre in enumerate(updated_g_list):
+    for index, genre in enumerate(updatedGenreList):
         print(f"{index + 1}- {genre}")
 
     # gets the genre that the user wants
-    genre_index = (input("What genre should your new playlist be? "))
-    seed_genre = updated_g_list[int(genre_index) - 1]
+    genre_index = input("What genre should your new playlist be? ")
+    try:
+        user_genre_index = int(genre_index)
+        if user_genre_index <= len(updatedGenreList) and user_genre_index > 0:
+            print("noted")
+        else:
+            print("Invalid input. Please enter a valid index.")
+    except ValueError:
+        print("Invalid input. Please enter a valid index.")
+    seed_genre = updatedGenreList[user_genre_index - 1]
+    
 
-    def find_match(seed):  # searches the list in the second column of each row for a match
+    def find_match(seed):  
         temporary_list = []
         i = 0
         while i in range(len(track_genre_list)):
@@ -90,9 +98,8 @@ def genres():
             temporary_list.clear()  # clearing list for next entry (only one entry at a time)
         return 'could not find match'
 
-    search_2 = find_match(seed_genre)
-
-    def find_id(list):  # takes in search_2 and returns the corresponding id
+    # takes in search_2 and returns the corresponding id
+    def find_id(list):  
         i = 0
         while i in range(len(track_genre_list)):
             if list == track_genre_list[i][1]:
@@ -101,20 +108,43 @@ def genres():
                 i += 1
         return 'could not find match'
 
+    search_2 = find_match(seed_genre)
     track_id = find_id(search_2)
     formatted_id = ['spotify:track:' + track_id]
-    recommended_tracks = sp_launch.recommendations(None, seed_genre, formatted_id, 10, None)
-    username = input('What is your spotify username?\n')
-    name = input('What should I name your playlist?\n')
-    new_playlist_id = sp_launch.user_playlist_create(username, name, True, False, "")['id']
-    #TO DO add recommended tracks to playlist
-    return str(recommended_tracks)
+    print("Found Match")
+
+
+    # Use the seed track to get 10 recommended tracks
+    recommendations = sp_launch.recommendations(seed_tracks=formatted_id, limit=10)
+    recommended_tracks = recommendations['tracks']
+    print("Got Reccomendations")
+
+    # Create a new playlist with user input as name
+    playlist_name = input("What is the name of your new playlist?\n")
+    playlist_description = input("What is the description of your new playlist?\n")
+    playlist = sp_launch.user_playlist_create(user=sp_launch.current_user()['id'], name=playlist_name, public=False, description=playlist_description)
+    print("Created Playlist")
+    
+    playlist_id = playlist['id']
+    
+    #add recommended tracks to new playlist 
+    def addTracksToPlaylist(sp, recommended_tracks, playlist_id):
+        track_ids = [track['id'] for track in recommended_tracks]
+        sp.user_playlist_add_tracks(sp.current_user()['id'], playlist_id, track_ids)
+        playlist_url = sp.user_playlist(sp.current_user()['id'], playlist_id)['external_urls']['spotify']
+        return f"Tracks added to playlist {playlist_url} successfully!"
+
+    return addTracksToPlaylist(sp_launch, recommended_tracks, playlist_id)
 
 
 # Spotify object
 def spotify_oauth():
     return SpotifyOAuth(
-        client_id= "Client Id",
-        client_secret="Client Secret",
+        client_id=clientID,
+        client_secret=clientSecret,
         redirect_uri=url_for('redirectUser', _external=True),
-        scope='user-library-read user-top-read playlist-modify-public')
+        scope='user-library-read user-top-read playlist-modify-private ')
+
+if __name__ == '__main__':
+    app.run()
+
