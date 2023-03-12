@@ -33,5 +33,5 @@ pip install spotipy
 
 <img width="1496" alt="Screenshot 2023-03-12 at 7 43 16 pm" src="https://user-images.githubusercontent.com/103650882/224569113-e0e78483-9015-46b2-ad11-a3702b4cc8ed.png">
 
-
+Sample playlist : https://open.spotify.com/playlist/5g3Sk7MdAJFQxHfkrNqLwz
 
