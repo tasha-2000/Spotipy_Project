@@ -10,7 +10,7 @@ import spotipy.util as util
 from spotipy import SpotifyOAuth
 
 app = Flask(__name__)
-app.secret_key = "BLs029sjO1"
+app.secret_key = "secretKey"
 app.config['SESSION_COOKIE_NAME'] = 'Session Cookie 1'
 TOKEN_INFO = "token_info"
 
