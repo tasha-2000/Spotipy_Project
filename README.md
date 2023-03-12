@@ -30,7 +30,8 @@ pip install spotipy
 <img width="402" alt="Screenshot 2023-03-12 at 7 40 29 pm" src="https://user-images.githubusercontent.com/103650882/224568932-41aae1a5-e60c-4063-8d61-48bf77fadcf9.png">
 
 ## Outcome
-<img width="690" alt="Screenshot 2023-03-12 at 6 25 42 pm" src="https://user-images.githubusercontent.com/103650882/224568805-12df7dc5-9512-4d48-afb1-795c69b51f43.png">
+
+<img width="1496" alt="Screenshot 2023-03-12 at 7 43 16 pm" src="https://user-images.githubusercontent.com/103650882/224569113-e0e78483-9015-46b2-ad11-a3702b4cc8ed.png">
 
 
 
