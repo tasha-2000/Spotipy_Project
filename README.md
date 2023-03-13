@@ -1,5 +1,5 @@
 # Spotipy_Project
-This project will add 10 recommended tracks to your playlist based on your selected genre and your liked songs on Spotify
+This project will create a new playlist based on your selected genre and your liked songs on Spotify
 
 ## How to run the source code
 This project assumes that you already set up your Spotify app and you have your client ID and client secret
