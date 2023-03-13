@@ -6,13 +6,13 @@ This project assumes that you already set up your Spotify app and you have your 
 
 1. Clone project and open it in your favourite editor
 
-2. Install the required libraries. In this case, you need Flask and Spotipy. You can install them using pip by running the following commands in your terminal/command prompt:
-pip install Flask
-pip install spotipy
+2. Install the required libraries. In this case, you need Flask and Spotipy. You can install them using pip by running the following commands in your   terminal/command prompt:
+ pip install Flask 
+ pip install spotipy
 
 3. In secrets.py, replace your_client_id and your_client_secret with your Spotify app client ID and client Secret
 
-4.In app.py, replace your_secret_key with a key of your choice
+4. In app.py, replace your_secret_key with a key of your choice
 
 5. Run the app by executing the main file in your terminal/command prompt:
      python main.py
@@ -23,7 +23,7 @@ pip install spotipy
 <img width="690" alt="Screenshot 2023-03-12 at 6 25 42 pm" src="https://user-images.githubusercontent.com/103650882/224568805-12df7dc5-9512-4d48-afb1-795c69b51f43.png">
 
 
-7.Click on the "Log in with Spotify" button and enter your Spotify credentials. Once you are logged in, the app will redirect you to the page where you can select the genre for your new playlist
+7. Click on the "Log in with Spotify" button and enter your Spotify credentials. Once you are logged in, the app will redirect you to the page where you can select the genre for your new playlist
 
 8. Follow the prompts and enter the required information to create your new playlist. The app will add 10 recommended tracks to your playlist based on your selected genre and your last 30 liked songs on Spotify.
 
